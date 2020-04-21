@@ -45,6 +45,8 @@ public class User {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="user_id")
     private List<Article> articles;
+    @ManyToMany(mappedBy = "userList")
+    private List<Role> listRole;
 
     public User(long id) {
         this.id=id;
