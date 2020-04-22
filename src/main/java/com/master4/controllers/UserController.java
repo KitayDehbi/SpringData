@@ -1,6 +1,7 @@
 package com.master4.controllers;
 
 import com.master4.entities.Article;
+import com.master4.entities.Role;
 import com.master4.entities.Tag;
 import com.master4.entities.User;
 import com.master4.exceptions.ResourceNotFoundException;
@@ -12,28 +13,52 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping({"","/user"})
+@RequestMapping({"/"})
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = {"/","/page/{id}"})
+    @GetMapping(value = {"/user","/user/page/{id}"})
     public String home(@PathVariable(name="id",required = false) Optional<Integer> id, ModelMap model){
         Page<User> pages = userService.getAllUsers(id, 3, "id");
         model.addAttribute("pageable", pages);
         return "user/home";
     }
-    @GetMapping("/add")
+    @GetMapping(value = {""})
+    public String index( ModelMap model ,User user){
+        model.addAttribute("user", user);
+        return "user/index";
+    }
+    @PostMapping("/login")
+    public String login(@ModelAttribute("user") User user, BindingResult result, ModelMap model , HttpSession session) throws ResourceNotFoundException {
+        if(result.hasErrors()){
+            model.addAttribute("user",user);
+            System.out.println(result);
+            return "user/index";
+        }
+        if(userService.isExist(user.getEmail(),user.getPassword())){
+            session.setAttribute("roles", userService.getRolesOfUserByEmail(user.getEmail()));
+            System.out.println("session ------------------------------");
+
+            List<Role> liste = (List<Role>) session.getAttribute("roles");
+            for( Role r : liste) System.out.println(r.getName());
+            return "redirect:/article/";
+        }
+        return  "user/index";
+    }
+    @GetMapping("/user/add")
     public String add(ModelMap model, User user) {
         model.addAttribute("user", user);
         return "user/add";
     }
-    @PostMapping("/save")
+
+    @PostMapping("/user/save")
     public String saveArticle(@Valid @ModelAttribute("user") User user, BindingResult result, ModelMap model) throws ResourceNotFoundException {
         if(result.hasErrors()){
             model.addAttribute("user",user);
@@ -43,18 +68,18 @@ public class UserController {
         userService.save(user);
         return "redirect:/user/";
     }
-    @RequestMapping("/view/{id}")
+    @RequestMapping("/user/view/{id}")
     public String view(@PathVariable("id") long id,ModelMap model) throws ResourceNotFoundException {
         model.addAttribute("user",userService.findById(id));
         model.addAttribute("articles" , userService.getArticlesOfUser(id));
         return "user/view";
     }
-    @GetMapping("/delete/{page}/{id}")
+    @GetMapping("/user/delete/{page}/{id}")
     public String delete(@PathVariable("page") long page,@PathVariable("id") long id, ModelMap model) throws ResourceNotFoundException {
         userService.deleteById(id);
         return "redirect:/user/page/"+page;
     }
-    @GetMapping("/add/{id}")
+    @GetMapping("/user/add/{id}")
     public String edit(@PathVariable("id") long id, ModelMap model) throws ResourceNotFoundException {
         User user = userService.findById(id);
         model.addAttribute("user", user);

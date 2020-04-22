@@ -28,7 +28,7 @@
 <div class="container">
     <jsp:directive.include file="../layout/header.jsp" />
     <header class="col-lg-12">
-        <h1>Tous les articles du Blog</h1>
+        <h1>Tous les Utilisateurs du Blog</h1>
         <div class="col-lg-12">
             <a href="${pageContext.request.contextPath}/user/add" id="space" class="btn btn-primary">Ajouter un utilisateur</a>
             <br/>

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(value = {"","/article"})
+@RequestMapping(value = {"/article"})
 public class ArticleController {
 
     @Autowired
@@ -43,7 +43,7 @@ public class ArticleController {
         //binder.registerCustomEditor(User.class,"user" , new UserFormatter(User.class));
     }
 
-    @GetMapping(value = {"/","/page/{id}"})
+    @GetMapping(value = {"","/page/{id}"})
     public String home(@PathVariable(name="id",required = false) Optional<Integer> id, ModelMap model)
     {
             Page<Article> pages = articleService.getAllArticles(id, 3, "id");

@@ -1,9 +1,11 @@
 package com.master4.services;
 
 import com.master4.entities.Article;
+import com.master4.entities.Role;
 import com.master4.entities.Tag;
 import com.master4.entities.User;
 import com.master4.exceptions.ResourceNotFoundException;
+import com.master4.repositories.RoleRepository;
 import com.master4.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +24,8 @@ import java.util.Optional;
 public class UserServiceImp implements UserService{
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -66,6 +69,16 @@ public class UserServiceImp implements UserService{
     @Override
     public List<Article> getArticlesOfUser(Long id) {
         return userRepository.getArticlesById(id);
+    }
+
+    @Override
+    public boolean isExist(String email, String password) {
+         return userRepository.getUserByEmaiAndPassword(email,password) != null;
+    }
+
+    @Override
+    public List<Role> getRolesOfUserByEmail(String email) {
+        return roleRepository.getRolesByEmail(email);
     }
 
 
