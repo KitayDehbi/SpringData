@@ -24,10 +24,11 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping({"/"})
-
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private HttpSession session;
 
     @GetMapping(value = {"/user","/user/page/{id}"})
     public String home(@PathVariable(name="id",required = false) Optional<Integer> id, ModelMap model){
@@ -41,7 +42,7 @@ public class UserController {
         return "user/index";
     }
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, BindingResult result, ModelMap model , HttpSession session) throws ResourceNotFoundException {
+    public String login(@ModelAttribute("user") User user, BindingResult result, ModelMap model ) throws ResourceNotFoundException {
         if(result.hasErrors()){
             model.addAttribute("user",user);
             System.out.println(result);
@@ -94,5 +95,9 @@ public class UserController {
 
 
         return "user/add";
+    }
+    @GetMapping("/redirect")
+    public String redirect(String st) {
+        return "redirect:/"+st;
     }
 }

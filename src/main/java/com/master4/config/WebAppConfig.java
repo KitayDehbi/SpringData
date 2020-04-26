@@ -16,6 +16,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = { "com.master4" })
+@EnableAspectJAutoProxy
 public class WebAppConfig implements WebMvcConfigurer {
 
     @Bean

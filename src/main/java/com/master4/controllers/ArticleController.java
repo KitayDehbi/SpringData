@@ -105,7 +105,10 @@ public class ArticleController {
     }
 
 
-
+    @GetMapping("/redirect")
+    public String redirect(String st) {
+        return "redirect:/"+st;
+    }
 
 
 

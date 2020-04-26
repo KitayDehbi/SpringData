@@ -45,7 +45,7 @@ public class AppContext {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean=new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPackagesToScan(new String[]{
-                "com.master4.entities" , "com.master4.aspects"
+                "com.master4.entities"
         });
         HibernateJpaVendorAdapter vendorAdapter=new HibernateJpaVendorAdapter();
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
