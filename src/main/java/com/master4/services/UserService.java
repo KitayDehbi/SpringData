@@ -18,6 +18,8 @@ public interface UserService {
     public void deleteById(long id);
     public List<Article> getArticlesOfUser(Long id);
     public boolean isExist(String email , String password);
-    public List<Role> getRolesOfUserByEmail(String email);
+    public List<String>  getRolesOfUserByEmail(String email);
+    public User findByEmail(String Email) throws ResourceNotFoundException;
+    public boolean isUserArticle(long iduser , long idArticle);
 
 }

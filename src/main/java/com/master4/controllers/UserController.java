@@ -6,6 +6,8 @@ import com.master4.entities.Tag;
 import com.master4.entities.User;
 import com.master4.exceptions.ResourceNotFoundException;
 import com.master4.services.UserService;
+import lombok.Getter;
+import lombok.Setter;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -24,11 +26,14 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping({"/"})
+@Getter
+@Setter
 public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
     private HttpSession session;
+    private String Error;
 
     @GetMapping(value = {"/user","/user/page/{id}"})
     public String home(@PathVariable(name="id",required = false) Optional<Integer> id, ModelMap model){
@@ -50,10 +55,9 @@ public class UserController {
         }
         if(userService.isExist(user.getEmail(),user.getPassword())){
             session.setAttribute("roles", userService.getRolesOfUserByEmail(user.getEmail()));
+            session.setAttribute("id", userService.findByEmail(user.getEmail()).getId());
             System.out.println("session ------------------------------");
 
-            List<Role> liste = (List<Role>) session.getAttribute("roles");
-            for( Role r : liste) System.out.println(r.getName());
             return "redirect:/article/";
         }
         return  "user/index";
@@ -72,9 +76,9 @@ public class UserController {
             return "user/add";
         }
         userService.save(user);
-        return "redirect:/user/";
+        return "redirect:/user";
     }
-    @Pointcut("execution( String com.master4.controllers.UserController.view(id,model))")
+
     @RequestMapping("/user/view/{id}")
     public String view(@PathVariable("id") long id,ModelMap model) throws ResourceNotFoundException {
         model.addAttribute("user",userService.findById(id));

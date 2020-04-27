@@ -5,6 +5,7 @@ import com.master4.entities.Role;
 import com.master4.entities.Tag;
 import com.master4.entities.User;
 import com.master4.exceptions.ResourceNotFoundException;
+import com.master4.repositories.ArticleRepository;
 import com.master4.repositories.RoleRepository;
 import com.master4.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class UserServiceImp implements UserService{
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Override
     @Transactional
@@ -77,8 +81,22 @@ public class UserServiceImp implements UserService{
     }
 
     @Override
-    public List<Role> getRolesOfUserByEmail(String email) {
-        return roleRepository.getRolesByEmail(email);
+    public List<String> getRolesOfUserByEmail(String email) {
+        List<String> liste = new ArrayList<>();
+        for (Role r : roleRepository.getRolesByEmail(email)){
+            liste.add(r.getName());
+        }
+        return liste;
+    }
+
+    @Override
+    public User findByEmail(String Email) throws ResourceNotFoundException {
+        return userRepository.getUserByEmail(Email);
+    }
+
+    @Override
+    public boolean isUserArticle(long iduser, long idArticle) {
+        return articleRepository.getArticleByUser(iduser,idArticle) !=null;
     }
 
 
