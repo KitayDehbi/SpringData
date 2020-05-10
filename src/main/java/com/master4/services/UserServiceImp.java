@@ -72,6 +72,7 @@ public class UserServiceImp implements UserService{
 
     @Override
     public List<Article> getArticlesOfUser(Long id) {
+
         return userRepository.getArticlesById(id);
     }
 

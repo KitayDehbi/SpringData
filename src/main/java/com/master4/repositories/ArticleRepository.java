@@ -22,6 +22,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long>  {
     Article findByIdWithTags(@Param("id") long id);
     @Query("select a from Article a where a.id=:AId and a.user.id=:UId")
     public Article getArticleByUser(@Param("UId") long user, @Param("AId") long article);
+    @Query("select a from Article a where a.title=:title")
+    Article getArticleByName(@Param("title") String title);
 
 
 

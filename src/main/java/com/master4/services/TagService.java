@@ -19,5 +19,6 @@ public interface TagService {
     void save(Tag article);
 
     void deleteById(long id);
+    Tag getTagByTitle (String title);
 
 }

@@ -62,4 +62,9 @@ public class TagServiceImpl implements TagService{
     public void deleteById(long id) {
         tagRepository.deleteById(id);
     }
+
+    @Override
+    public Tag getTagByTitle(String title) {
+        return tagRepository.findTagByName(title);
+    }
 }

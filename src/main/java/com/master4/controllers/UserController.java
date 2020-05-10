@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,12 +42,12 @@ public class UserController {
         model.addAttribute("pageable", pages);
         return "user/home";
     }
-    @GetMapping(value = {""})
+    @GetMapping(value = {"/"})
     public String index( ModelMap model ,User user){
         model.addAttribute("user", user);
         return "user/index";
     }
-    @PostMapping("/login")
+    @RequestMapping("/login")
     public String login(@ModelAttribute("user") User user, BindingResult result, ModelMap model ) throws ResourceNotFoundException {
         if(result.hasErrors()){
             model.addAttribute("user",user);
@@ -54,10 +55,14 @@ public class UserController {
             return "user/index";
         }
         if(userService.isExist(user.getEmail(),user.getPassword())){
+            session.setAttribute("user", userService.findByEmail(user.getEmail()));
             session.setAttribute("roles", userService.getRolesOfUserByEmail(user.getEmail()));
-            session.setAttribute("id", userService.findByEmail(user.getEmail()).getId());
-            System.out.println("session ------------------------------");
+            List<Long> articles =new ArrayList<>();
 
+            for (Article a : userService.getArticlesOfUser(userService.findByEmail(user.getEmail()).getId())){
+                articles.add(a.getId());}
+            session.setAttribute("articles", articles);
+            //
             return "redirect:/article/";
         }
         return  "user/index";

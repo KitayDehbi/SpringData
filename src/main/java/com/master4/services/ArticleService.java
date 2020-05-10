@@ -21,5 +21,6 @@ public interface ArticleService {
     void deleteById(long id);
 
     Article findByIdWithTags(@Param("id") long id);
+    Article findArticleWithName(String name);
 
 }

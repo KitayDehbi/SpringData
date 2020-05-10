@@ -1,6 +1,7 @@
 package com.master4.entities;
 
 
+import com.master4.validators.UniqueArticleName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,8 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Size(min=3, message = "minimum 3 lettre")
+    @UniqueArticleName
+    @Size(min = 5, message = "the name must contains 5 characters")
     @Column(name = "title" )
     private String title;
 

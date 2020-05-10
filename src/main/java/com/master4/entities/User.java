@@ -2,7 +2,9 @@ package com.master4.entities;
 
 
 import com.master4.validators.Password;
+import com.master4.validators.UniqueEmail;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -18,6 +20,7 @@ import java.util.List;
 @Entity
 @Table(name="users")
 @Password
+@UniqueEmail
 public class User {
 
     @Id
@@ -26,6 +29,7 @@ public class User {
     @Column(name="name", nullable = false)
     @Size(min = 5, message = "5 caracteres au min")
     private String name;
+
     @Email(message = "email invalid")
     @Column(name="email", nullable = false, unique = true)
     private String email;
@@ -43,9 +47,9 @@ public class User {
     private Date modified;
 
     @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id" )
     private List<Article> articles;
-    @ManyToMany(mappedBy = "userList")
+    @ManyToMany(mappedBy = "userList" ,fetch = FetchType.EAGER)
     private List<Role> listRole;
 
     public User(long id) {

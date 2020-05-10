@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Aspect
+//@Aspect
 @Component
 public class ActionsManager {
     @Autowired
